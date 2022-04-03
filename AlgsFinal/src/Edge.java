@@ -1,7 +1,18 @@
 public abstract class Edge {
-    private int Stop_id;
+    private Integer fromStopId;
+    private Integer toStopId;
     // the id of the stop the edge is going to
-    private Double duration;
-    //the time in minutes that this journey to the next stop will take
 
+    //the time in seconds that this journey to the next stop will take
+
+    public Edge(Integer fromStopId, Integer toStopId) {
+        this.fromStopId = fromStopId;
+        this.toStopId = toStopId;
+    }
+
+    public Integer getFromStopId() {
+        return this.fromStopId;
+    }
+
+    public abstract int Weight();
 }
