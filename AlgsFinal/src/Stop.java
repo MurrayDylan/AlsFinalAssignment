@@ -52,4 +52,17 @@ public class Stop {
     public String getStopName() {
         return stop_name;
     }
+
+    public String getTransformedStopName() {
+        switch (this.stop_name.substring(0,2))
+        {
+            case "wb":
+            case "nb":
+            case "sb":
+            case "eb":
+                return this.stop_name.substring(3) + " " + this.stop_name.substring(0,2);
+            default:
+                return this.stop_name;
+        }
+    }
 }

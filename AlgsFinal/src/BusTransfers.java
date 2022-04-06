@@ -94,7 +94,7 @@ public class BusTransfers {
                         parentStation
                 );
                 this.stopsById.put(stop.getStopId().toString(), stop);
-                this.stopsByName.put(stop.getStopName(), stop);
+                this.stopsByName.put(stop.getTransformedStopName(), stop);
             }
         }
         catch (NumberFormatException nfe) {
