@@ -1,6 +1,5 @@
 import java.nio.file.FileSystemNotFoundException;
 import java.time.LocalTime;
-import java.util.HashMap;
 import java.io.*;
 
 
@@ -21,9 +20,11 @@ public class BusTransfers {
     static final int RECORD_TRANSFERS_TRANSFER_TYPE = 2;
     static final int RECORD_TRANSFERS_MIN_TRANSFER_TIME = 3;
     //Temporary storage of stops, this needs to be implemented as TST
-    HashMap<Integer, Stop> stops;
+    TST<Stop> stopsById;
+    TST<Stop> stopsByName;
     public BusTransfers() {
-        this.stops = new HashMap<Integer, Stop>();
+        this.stopsById = new TST<Stop>();
+        this.stopsByName = new TST<Stop>();
         this.loadFile("/Users/dylanmurray/Downloads/input files/stops.txt", RecordType.Stop);
         this.loadFile("/Users/dylanmurray/Downloads/input files/transfers.txt", RecordType.Transfer);
         this.loadFile("/Users/dylanmurray/Downloads/input files/stop_times.txt", RecordType.Route);
@@ -50,9 +51,6 @@ public class BusTransfers {
                             break;
                     }
                     prevRecord = currRecord;
-                    if (stops.size() % 200 == 0) {
-                        System.out.println("Records loaded " + String.valueOf(stops.size()));
-                    }
                 }
                 else{
                     isFirstLine = false;
@@ -95,7 +93,8 @@ public class BusTransfers {
                         locationType,
                         parentStation
                 );
-                this.stops.put(stop.getStop_id(), stop);
+                this.stopsById.put(stop.getStopId().toString(), stop);
+                this.stopsByName.put(stop.getStopName(), stop);
             }
         }
         catch (NumberFormatException nfe) {
@@ -119,7 +118,7 @@ public class BusTransfers {
                         minTransferTime
 
                 );
-                Stop stop = this.stops.get(transfer.getFromStopId());
+                Stop stop = this.stopsById.get(transfer.getFromStopId().toString());
                 if(stop != null) {
                     stop.addEdge(transfer);
                 }

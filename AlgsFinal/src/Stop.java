@@ -41,11 +41,15 @@ public class Stop {
         this.edges = new ArrayList<Edge>();
     }
 
-    public Integer getStop_id() {
+    public Integer getStopId() {
         return this.stop_id;
     }
 
     public void addEdge(Edge edge) {
         edges.add(edge);
+    }
+
+    public String getStopName() {
+        return stop_name;
     }
 }
