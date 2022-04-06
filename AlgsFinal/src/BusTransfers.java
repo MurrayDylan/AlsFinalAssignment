@@ -1,4 +1,5 @@
 import java.nio.file.FileSystemNotFoundException;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.io.*;
 
@@ -25,6 +26,7 @@ public class BusTransfers {
         this.stops = new HashMap<Integer, Stop>();
         this.loadFile("/Users/dylanmurray/Downloads/input files/stops.txt", RecordType.Stop);
         this.loadFile("/Users/dylanmurray/Downloads/input files/transfers.txt", RecordType.Transfer);
+        this.loadFile("/Users/dylanmurray/Downloads/input files/stop_times.txt", RecordType.Route);
     }
 
     private void loadFile(String fileName, RecordType type) {
@@ -131,5 +133,40 @@ public class BusTransfers {
 
     private void loadRoute(String[] prevRecord, String[] currRecord) {
 
+       /*
+        try {
+            Integer tripID = (record.length > RECORD_STOP_STOP_ID) ? Integer.parseInt(record[RECORD_STOP_STOP_ID]) : null;
+            LocalTime arrivalTime = (record.length > RECORD_STOP_STOP_CODE) ? record[RECORD_STOP_STOP_CODE] : null;
+            LocalTime departureTime = (record.length > RECORD_STOP_STOP_NAME) ? record[RECORD_STOP_STOP_NAME] : null;
+            int stopSequence = (record.length > RECORD_STOP_STOP_DESC) ? record[RECORD_STOP_STOP_DESC] : null;
+            String stopHeadsign = (record.length > RECORD_STOP_STOP_LAT) ? Double.parseDouble(record[RECORD_STOP_STOP_LAT]) : null;
+            PickupType pickupType = (record.length > RECORD_STOP_STOP_LON) ? Double.parseDouble(record[RECORD_STOP_STOP_LON]) : null;
+            PickupType dropOffType = (record.length > RECORD_STOP_ZONE_ID) ? record[RECORD_STOP_ZONE_ID] : null;
+            Double shapeDistTraveled = (record.length > RECORD_STOP_STOP_URL) ? record[RECORD_STOP_STOP_URL] : null;
+
+            if (stopId != null) {
+                Stop stop = new Stop(
+                        stopId,
+                        stopCode,
+                        stopName,
+                        stopDesc,
+                        stopLat,
+                        stopLon,
+                        zoneId,
+                        stopURL,
+                        locationType,
+                        parentStation
+                );
+                this.stops.put(stop.getStop_id(), stop);
+            }
+        }
+        catch (NumberFormatException nfe) {
+            // TODO Handle Exception
+            System.out.println(nfe.toString());
+        }
+
+        */
     }
+
+
 }

@@ -1,21 +1,21 @@
 import java.time.*;
 
 public class Route extends Edge {
-    private int trip_id;
+    private int tripID;
     //Identifies a trip.
-    private LocalTime arrival_time;
+    private LocalTime arrivalTime;
     //Arrival time at a specific stop for a specific trip on a route.
-    private LocalTime departure_time;
+    private LocalTime departureTime;
     //Departure time from a specific stop for a specific trip on a route.
-    private int stop_sequence;
+    private int stopSequence;
     //Order of stops for a particular trip. The values must increase along the trip but do not need to be consecutive.
-    private String stop_headsign;
+    private String stopHeadsign;
     //Text that appears on signage identifying the trip's destination to riders.
-    private PickupType pickup_type;
+    private PickupType pickupType;
     //Indicates pickup method.
-    private PickupType drop_off_type;
+    private PickupType dropOffType;
 
-    private Double shape_dist_travelled;
+    private Double shapeDistTraveled;
     //Actual distance traveled along the associated shape, from the first stop to the stop specified in this record.
 
     public Route(Integer fromStopId, Integer toStopId) {
