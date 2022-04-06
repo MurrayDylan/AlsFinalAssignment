@@ -1,6 +1,7 @@
 import java.nio.file.FileSystemNotFoundException;
 import java.time.LocalTime;
 import java.io.*;
+import java.util.ArrayList;
 
 
 public class BusTransfers {
@@ -40,7 +41,9 @@ public class BusTransfers {
         this.stopsByName = new TST<Stop>();
         this.loadFile("/Users/dylanmurray/Downloads/input files/stops.txt", RecordType.Stop);
         this.loadFile("/Users/dylanmurray/Downloads/input files/transfers.txt", RecordType.Transfer);
-        this.loadFile("/Users/dylanmurray/Downloads/input files/stop_times.txt", RecordType.Route);
+      //  this.loadFile("/Users/dylanmurray/Downloads/input files/stop_times.txt", RecordType.Route);
+        ArrayList<Stop> x = this.stopsByName.like("HAS");
+
     }
 
     private void loadFile(String fileName, RecordType type) {

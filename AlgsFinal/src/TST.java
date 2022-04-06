@@ -1,5 +1,8 @@
 //template for tst found here: https://www.youtube.com/watch?v=lX8YmSO4NnU
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class TST<Value> {
     private Node root;
 
@@ -13,7 +16,7 @@ public class TST<Value> {
         root = put(root, key, val, 0);
     }
 
-    public Node put(Node x, String key, Value val, int d) {
+    private Node put(Node x, String key, Value val, int d) {
         char c = key.charAt(d);
         if (x == null) {
             x = new Node();
@@ -59,5 +62,26 @@ public class TST<Value> {
                 return x;
             }
         }
+    }
+    public ArrayList<Value> like(String search) {
+        Node x = get(root, search, 0);
+        ArrayList<Value> results = new ArrayList<>();
+        if(x != null && x.val != null) {
+            results.add(x.val);
+        }
+        like(results, x.mid);
+        return results;
+    }
+
+    private void like(ArrayList<Value> results, Node x ) {
+        if(x != null) {
+            if (x.val != null){
+                results.add(x.val);
+            }
+            if(x.left != null)      like(results, x.left);
+            if(x.mid != null)       like(results, x.mid);
+            if(x.right != null)     like(results, x.right);
+        }
+
     }
 }

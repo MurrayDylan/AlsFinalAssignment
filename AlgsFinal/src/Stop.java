@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Stop {
 
@@ -54,14 +55,18 @@ public class Stop {
     }
 
     public String getTransformedStopName() {
-        switch (this.stop_name.substring(0,2))
+        switch (this.stop_name.substring(0,2).toUpperCase(Locale.ROOT))
         {
-            case "wb":
-            case "nb":
-            case "sb":
-            case "eb":
+            case "WB":
+            case "FS":
+            case "NB":
+            case "SB":
+            case "EB":
                 return this.stop_name.substring(3) + " " + this.stop_name.substring(0,2);
             default:
+                if(this.stop_name.substring(0,8).toUpperCase(Locale.ROOT) == "FLAGSTOP") {
+                    return this.stop_name.substring(9) + " " + this.stop_name.substring(0,8);
+                }
                 return this.stop_name;
         }
     }
