@@ -44,7 +44,7 @@ public class Route extends Edge {
 
     }
 
-    public int Weight(){
+    public double Weight(){
         /*
         this.journeyTime = this.arrivalTimeNextStop.toSecondOfDay() - this.arrivalTimeCurrentStop.toSecondOfDay();
         return journeyTime;

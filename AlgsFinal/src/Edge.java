@@ -14,5 +14,5 @@ public abstract class Edge {
         return this.fromStopId;
     }
 
-    public abstract int Weight();
+    public abstract double Weight();
 }

@@ -55,6 +55,7 @@ public class Stop {
     }
 
     public String getTransformedStopName() {
+        String ret;
         switch (this.stop_name.substring(0,2).toUpperCase(Locale.ROOT))
         {
             case "WB":
@@ -62,12 +63,17 @@ public class Stop {
             case "NB":
             case "SB":
             case "EB":
-                return this.stop_name.substring(3) + " " + this.stop_name.substring(0,2);
+                ret = this.stop_name.substring(3) + " " + this.stop_name.substring(0,2);
+                break;
             default:
                 if(this.stop_name.substring(0,8).toUpperCase(Locale.ROOT) == "FLAGSTOP") {
-                    return this.stop_name.substring(9) + " " + this.stop_name.substring(0,8);
+                    ret = this.stop_name.substring(9) + " " + this.stop_name.substring(0,8);
                 }
-                return this.stop_name;
+                else {
+                    ret = this.stop_name;
+                }
+                break;
         }
+        return ret.toUpperCase(Locale.ROOT);
     }
 }

@@ -2,6 +2,7 @@
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class TST<Value> {
     private Node root;
@@ -64,12 +65,14 @@ public class TST<Value> {
         }
     }
     public ArrayList<Value> like(String search) {
-        Node x = get(root, search, 0);
+        Node x = get(root, search.toUpperCase(Locale.ROOT), 0);
         ArrayList<Value> results = new ArrayList<>();
-        if(x != null && x.val != null) {
-            results.add(x.val);
+        if(x != null ) {
+            if(x.val != null) {
+                results.add(x.val);
+            }
+            like(results, x.mid);
         }
-        like(results, x.mid);
         return results;
     }
 

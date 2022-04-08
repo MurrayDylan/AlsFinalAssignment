@@ -2,6 +2,8 @@ import java.nio.file.FileSystemNotFoundException;
 import java.time.LocalTime;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Scanner;
 
 
 public class BusTransfers {
@@ -42,7 +44,12 @@ public class BusTransfers {
         this.loadFile("/Users/dylanmurray/Downloads/input files/stops.txt", RecordType.Stop);
         this.loadFile("/Users/dylanmurray/Downloads/input files/transfers.txt", RecordType.Transfer);
       //  this.loadFile("/Users/dylanmurray/Downloads/input files/stop_times.txt", RecordType.Route);
-        ArrayList<Stop> x = this.stopsByName.like("HAS");
+        Scanner Scanner = new Scanner(System.in);
+        System.out.println("Enter Stop Name");
+        String userInput = Scanner.nextLine();
+        System.out.println("User Input:" + userInput);
+        ArrayList<Stop> searchList = this.stopsByName.like(userInput);
+        searchList.forEach((s) -> System.out.println(s.getStopName()));
 
     }
 
@@ -124,7 +131,7 @@ public class BusTransfers {
             Integer fromStopId = (record.length > RECORD_TRANSFERS_FROM_STOP_ID) ? Integer.parseInt(record[RECORD_TRANSFERS_FROM_STOP_ID]) : null;
             Integer toStopId = (record.length > RECORD_TRANSFERS_TO_STOP_ID) ? Integer.parseInt(record[RECORD_TRANSFERS_TO_STOP_ID]) : null;
             TransferType transferType = (record.length > RECORD_TRANSFERS_TRANSFER_TYPE) ?  TransferType.values()[Integer.parseInt(record[RECORD_TRANSFERS_TRANSFER_TYPE])] : null;
-            Integer minTransferTime = (record.length > RECORD_TRANSFERS_MIN_TRANSFER_TIME) ? Integer.parseInt(record[RECORD_TRANSFERS_MIN_TRANSFER_TIME]) : null;
+            Double minTransferTime = (record.length > RECORD_TRANSFERS_MIN_TRANSFER_TIME) ? Double.parseDouble(record[RECORD_TRANSFERS_MIN_TRANSFER_TIME]) : null;
 
             if (fromStopId != null) {
                 Transfer transfer = new Transfer(
