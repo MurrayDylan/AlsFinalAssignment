@@ -73,4 +73,9 @@ public class Route extends Edge {
         return this.tripId;
     }
 
+    public LocalTime getArrival() {
+        //TODO get Local arrival
+        return arrivalTimeCurrentStop;
+    }
+
 }

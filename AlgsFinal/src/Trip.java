@@ -13,4 +13,16 @@ public class Trip {
     public void addRoute(Route route) {
         this.journey.add(route);
     }
+
+    public ArrayList<Route> getJourney() {
+        return journey;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Trip ID: " + tripId);
+        //TODO display stop information
+        return sb.toString();
+    }
 }

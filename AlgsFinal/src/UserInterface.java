@@ -1,3 +1,4 @@
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
@@ -16,6 +17,9 @@ public class UserInterface {
 
     private static void initialise() {
         errorMessage = "";
+        clearScreen();
+        System.out.println("Loading Files... please wait");
+        System.out.println("");
         createBusTransfers();
     }
 
@@ -35,6 +39,7 @@ public class UserInterface {
     }
 
     private static void mainMenu() {
+        errorMessage = "";
         boolean isFinished = false;
         while(!isFinished) {
             clearScreen();
@@ -57,6 +62,7 @@ public class UserInterface {
                     searchForStopByName();
                     break;
                 case "3":
+                    searchAllTripsByArrivalTime();
                     break;
                 case "4":
                     isFinished = true;
@@ -69,6 +75,7 @@ public class UserInterface {
     }
 
     private static void searchForStopByName() {
+        errorMessage = "";
         boolean isFinished = false;
         while(!isFinished) {
             clearScreen();
@@ -93,6 +100,32 @@ public class UserInterface {
                 default:
                     isFinished = true;
                     break;
+            }
+        }
+    }
+
+    private static void searchAllTripsByArrivalTime() {
+        errorMessage = "";
+        boolean isFinished = false;
+        while(!isFinished) {
+            clearScreen();
+            System.out.println("~~~~Arrival Time Search~~~~");
+            System.out.println("=================");
+            System.out.println("");
+            System.out.println(errorMessage);
+            System.out.println("");
+            System.out.println("Enter arrival time (HH:MM:SS): ");
+            userInput = scanner.nextLine();
+            System.out.println("");
+            LocalTime time = Utility.parseLocalTime(userInput);
+            if(time == null) {
+                errorMessage = "Invalid time entered";
+            }
+            else {
+                errorMessage = "";
+                bt.getTripsByArrivalTime(time).forEach((t) -> {
+                    System.out.println(t.toString());
+                } );
             }
         }
     }

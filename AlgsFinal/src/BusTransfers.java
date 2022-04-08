@@ -1,5 +1,6 @@
 import java.time.LocalTime;
 import java.io.*;
+import java.util.ArrayList;
 
 public class BusTransfers {
     static final int RECORD_STOP_STOP_ID = 0;
@@ -40,7 +41,7 @@ public class BusTransfers {
         this.trips = new TST<Trip>();
         this.loadFile(fileDirectory + "stops.txt", RecordType.Stop);
         this.loadFile(fileDirectory + "transfers.txt", RecordType.Transfer);
-      //  this.loadFile(fileDirectory + "stop_times.txt", RecordType.Route);
+        this.loadFile(fileDirectory + "stop_times.txt", RecordType.Route);
     }
 
     private void loadFile(String fileName, RecordType type) {
@@ -150,50 +151,56 @@ public class BusTransfers {
                 Integer toStopId = (currRecord.length > RECORD_STOP_STOP_ID) ? Integer.parseInt(prevRecord[RECORD_ROUTE_STOP_ID]) : null;
                 Integer fromStopId = (prevRecord.length > RECORD_STOP_STOP_ID) ? Integer.parseInt(currRecord[RECORD_ROUTE_STOP_ID]) : null;
                 Integer tripID = (currRecord.length > RECORD_STOP_STOP_ID) ? Integer.parseInt(currRecord[RECORD_ROUTE_TRIP_ID]) : null;
-                LocalTime arrivalTimeCurrentStop = (currRecord.length > RECORD_ROUTE_ARRIVAL_TIME) ? BusTransfers.parseLocalTime(prevRecord[RECORD_ROUTE_ARRIVAL_TIME]) : null;
-                LocalTime arrivalTimeNextStop = (prevRecord.length > RECORD_ROUTE_ARRIVAL_TIME) ? BusTransfers.parseLocalTime(currRecord[RECORD_ROUTE_ARRIVAL_TIME]) : null;
-                LocalTime departureTime = (currRecord.length > RECORD_ROUTE_DEPARTURE_TIME) ? BusTransfers.parseLocalTime(currRecord[RECORD_ROUTE_DEPARTURE_TIME]) : null;
+                LocalTime arrivalTimeCurrentStop = (currRecord.length > RECORD_ROUTE_ARRIVAL_TIME) ? Utility.parseLocalTime(prevRecord[RECORD_ROUTE_ARRIVAL_TIME]) : null;
+                LocalTime arrivalTimeNextStop = (prevRecord.length > RECORD_ROUTE_ARRIVAL_TIME) ? Utility.parseLocalTime(currRecord[RECORD_ROUTE_ARRIVAL_TIME]) : null;
+                LocalTime departureTime = (currRecord.length > RECORD_ROUTE_DEPARTURE_TIME) ? Utility.parseLocalTime(currRecord[RECORD_ROUTE_DEPARTURE_TIME]) : null;
                 String stopHeadsign = (currRecord.length > RECORD_ROUTE_STOP_HEADSIGN) ? currRecord[RECORD_ROUTE_STOP_HEADSIGN] : null;
                 PickupType pickupType = (currRecord.length > RECORD_ROUTE_PICKUP_TYPE) ? PickupType.values()[Integer.parseInt(currRecord[RECORD_ROUTE_PICKUP_TYPE])] : null;
                 PickupType dropOffType = (currRecord.length > RECORD_ROUTE_DROP_OFF_TYPE) ? PickupType.values()[Integer.parseInt(currRecord[RECORD_ROUTE_DROP_OFF_TYPE])] : null;
                 Double shapeDistTraveled = (currRecord.length > RECORD_ROUTE_SHAPE_DIST_TRAVELED) ? Double.parseDouble(currRecord[RECORD_ROUTE_SHAPE_DIST_TRAVELED]) : null;
 
-                Route route = new Route(
-                        this,
-                        toStopId,
-                        fromStopId,
-                        tripID,
-                        arrivalTimeCurrentStop,
-                        arrivalTimeNextStop,
-                        departureTime,
-                        stopSequence,
-                        stopHeadsign,
-                        pickupType,
-                        dropOffType,
-                        shapeDistTraveled
-                );
-         //       this.route.put(route.getStop_id(), stop);
+                //TODO I chose to exlcude any invalid bus times as they should be seen as errors. not enough documentation was provided in specificiations so i chose myself
+                if (arrivalTimeCurrentStop != null) {
+                    Route route = new Route(
+                            this,
+                            toStopId,
+                            fromStopId,
+                            tripID,
+                            arrivalTimeCurrentStop,
+                            arrivalTimeNextStop,
+                            departureTime,
+                            stopSequence,
+                            stopHeadsign,
+                            pickupType,
+                            dropOffType,
+                            shapeDistTraveled
+                    );
+                }
             }
         }
         catch (NumberFormatException nfe) {
             // TODO Handle Exception
             System.out.println(nfe.toString());
         }
-
-
     }
 
     public TST<Stop> getStopsById() {return this.stopsById;};
     public TST<Stop> getStopsByName() {return this.stopsByName;};
     public TST<Trip> getTrips() {return this.trips;};
 
-    private static LocalTime parseLocalTime(String time) {
-        try{
-            String t = time.trim();
-            return LocalTime.parse(((t.length() == 7 ) ? "0" : "") + t);
-        }
-        catch(Exception e){
-            return null;
-        }
+    public ArrayList<Trip> getTripsByArrivalTime(LocalTime arrivalTime) {
+        ArrayList<Trip> ret = new ArrayList<>();
+        this.trips.toArrayList().forEach((t) -> {
+            ArrayList<Route> journey = t.getJourney();
+            for(int i = 0; i < journey.size(); i++) {
+                //TODO handle stop sequence equal to 1 (doesnt display)
+                if(journey.get(i).getArrival().equals(arrivalTime)) {
+                    ret.add(t);
+                    break;
+                }
+            }
+        });
+        return ret;
     }
 }
+
