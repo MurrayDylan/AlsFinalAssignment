@@ -65,7 +65,7 @@ public class Route extends Edge {
         this.journeyTime = this.arrivalTimeNextStop.toSecondOfDay() - this.arrivalTimeCurrentStop.toSecondOfDay();
         return journeyTime;
         */
-        return 0;
+        return 1;
         //TODO
     }
 

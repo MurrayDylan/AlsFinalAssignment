@@ -1,10 +1,5 @@
-import java.nio.file.FileSystemNotFoundException;
 import java.time.LocalTime;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Scanner;
-
 
 public class BusTransfers {
     static final int RECORD_STOP_STOP_ID = 0;
@@ -39,20 +34,13 @@ public class BusTransfers {
     private TST<Stop> stopsById;
     private TST<Stop> stopsByName;
     private TST<Trip> trips;
-    public BusTransfers() {
+    public BusTransfers(String fileDirectory) {
         this.stopsById = new TST<Stop>();
         this.stopsByName = new TST<Stop>();
         this.trips = new TST<Trip>();
-        this.loadFile("/Users/dylanmurray/Downloads/input files/stops.txt", RecordType.Stop);
-        this.loadFile("/Users/dylanmurray/Downloads/input files/transfers.txt", RecordType.Transfer);
-      //  this.loadFile("/Users/dylanmurray/Downloads/input files/stop_times.txt", RecordType.Route);
-        Scanner Scanner = new Scanner(System.in);
-        System.out.println("Enter Stop Name");
-        String userInput = Scanner.nextLine();
-        System.out.println("User Input:" + userInput);
-        ArrayList<Stop> searchList = this.stopsByName.like(userInput);
-        searchList.forEach((s) -> System.out.println(s.getStopName()));
-
+        this.loadFile(fileDirectory + "stops.txt", RecordType.Stop);
+        this.loadFile(fileDirectory + "transfers.txt", RecordType.Transfer);
+      //  this.loadFile(fileDirectory + "stop_times.txt", RecordType.Route);
     }
 
     private void loadFile(String fileName, RecordType type) {

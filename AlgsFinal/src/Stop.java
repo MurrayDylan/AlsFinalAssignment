@@ -76,4 +76,28 @@ public class Stop {
         }
         return ret.toUpperCase(Locale.ROOT);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder ret = new StringBuilder();
+        ret.append("********************************************************");
+        ret.append("\n");
+        ret.append("Name: " + stop_name);
+        ret.append("\n");
+        ret.append("Description: " + stop_desc);
+        ret.append("\n");
+        ret.append("GPS: " + stop_lon + "N " + stop_lat + "W");
+        ret.append("\n");
+        ret.append("Zone ID: " + ((zone_id != null) ? zone_id : "N/A"));
+        ret.append(" - Stop ID: " +  ((stop_id != null) ? stop_id : "N/A"));
+        ret.append(" - Stop Code: " + ((stop_code != null) ? stop_code : "N/A"));
+        ret.append("\n");
+        ret.append("Stop URL: " + (!(stop_url == null || stop_url.trim().equals("")) ? stop_url : "N/A"));
+        ret.append("\n");
+        ret.append("Location Type: " + ((location_type != null) ? location_type : "N/A"));
+        ret.append(" - Parent Station: " + ((parent_station != null) ? parent_station : "N/A"));
+        ret.append("\n");
+        ret.append("********************************************************");
+        return ret.toString();
+    }
 }

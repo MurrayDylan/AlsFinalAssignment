@@ -64,14 +64,20 @@ public class TST<Value> {
             }
         }
     }
+
     public ArrayList<Value> like(String search) {
-        Node x = get(root, search.toUpperCase(Locale.ROOT), 0);
         ArrayList<Value> results = new ArrayList<>();
-        if(x != null ) {
-            if(x.val != null) {
-                results.add(x.val);
+        if(search.equals("")) {
+            results = this.toArrayList();
+        }
+        else {
+            Node x = get(root, search.toUpperCase(Locale.ROOT), 0);
+            if (x != null) {
+                if (x.val != null) {
+                    results.add(x.val);
+                }
+                addToArrayList(results, x.mid);
             }
-            addToArrayList(results, x.mid);
         }
         return results;
     }

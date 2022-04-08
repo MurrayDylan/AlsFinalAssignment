@@ -10,6 +10,6 @@ public class Transfer extends Edge {
         this.minTime = minTime;
     }
     public double Weight(){
-        return (this.transferType == TransferType.MinimumTime) ? minTime.doubleValue() / 100.0 : 0;
+        return (this.transferType == TransferType.MinimumTime) ? minTime.doubleValue() / 100.0 : 2;
     }
 }
