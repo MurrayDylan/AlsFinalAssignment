@@ -71,20 +71,25 @@ public class TST<Value> {
             if(x.val != null) {
                 results.add(x.val);
             }
-            like(results, x.mid);
+            addToArrayList(results, x.mid);
         }
         return results;
     }
 
-    private void like(ArrayList<Value> results, Node x ) {
+    private void addToArrayList(ArrayList<Value> results, Node x ) {
         if(x != null) {
             if (x.val != null){
                 results.add(x.val);
             }
-            if(x.left != null)      like(results, x.left);
-            if(x.mid != null)       like(results, x.mid);
-            if(x.right != null)     like(results, x.right);
+            if(x.left != null)      addToArrayList(results, x.left);
+            if(x.mid != null)       addToArrayList(results, x.mid);
+            if(x.right != null)     addToArrayList(results, x.right);
         }
+    }
 
+    public ArrayList<Value> toArrayList() {
+        ArrayList<Value> ret = new ArrayList<Value>();
+        addToArrayList(ret, root);
+        return ret;
     }
 }

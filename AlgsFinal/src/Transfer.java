@@ -4,8 +4,8 @@ public class Transfer extends Edge {
     private Double minTime;
     //Amount of time, in seconds, that must be available to permit a transfer between routes at the specified stops.
 
-    public Transfer(Integer fromStopId, Integer toStopId, TransferType transferType, Double minTime) {
-        super(fromStopId, toStopId);
+    public Transfer(BusTransfers bT, Integer fromStopId, Integer toStopId, TransferType transferType, Double minTime) {
+        super(bT, fromStopId, toStopId);
         this.transferType = transferType;
         this.minTime = minTime;
     }

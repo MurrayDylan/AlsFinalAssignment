@@ -1,17 +1,16 @@
 public abstract class Edge {
-    private Integer fromStopId;
-    private Integer toStopId;
+    private Stop fromStop;
+    private Stop toStop;
     // the id of the stop the edge is going to
 
     //the time in seconds that this journey to the next stop will take
 
-    public Edge(Integer fromStopId, Integer toStopId) {
-        this.fromStopId = fromStopId;
-        this.toStopId = toStopId;
-    }
-
-    public Integer getFromStopId() {
-        return this.fromStopId;
+    public Edge(BusTransfers bT, Integer fromStopId, Integer toStopId) {
+        this.fromStop = bT.getStopsById().get(fromStopId.toString());
+        this.toStop = bT.getStopsById().get(toStopId.toString());
+        if (this.fromStop != null) {
+            this.fromStop.addEdge(this);
+        }
     }
 
     public abstract double Weight();

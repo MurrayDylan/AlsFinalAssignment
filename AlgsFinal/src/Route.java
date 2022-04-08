@@ -27,7 +27,8 @@ public class Route extends Edge {
     private Integer toStopId;
     //the StopId of the stop it will arrive at
 
-    public Route(Integer fromStopId,
+    public Route(BusTransfers bT,
+                 Integer fromStopId,
                  Integer toStopId,
                  Integer tripId,
                  LocalTime arrivalTimeCurrentStop,
@@ -40,8 +41,23 @@ public class Route extends Edge {
                  Double shapeDistTraveled
     )
     {
-        super(fromStopId, toStopId);
-
+        super(bT, fromStopId, toStopId);
+        this.tripId = tripId;
+        this.arrivalTimeCurrentStop = arrivalTimeCurrentStop;
+        this.arrivalTimeNextStop = arrivalTimeNextStop;
+        this.departureTime = departureTime;
+        this.stopHeadsign = stopHeadsign;
+        this.stopSequence = stopSequence;
+        this.pickupType = pickupType;
+        this.dropOffType = dropOffType;
+        this.shapeDistTraveled =shapeDistTraveled;
+        Trip t = bT.getTrips().get(this.tripId.toString());
+        if (t != null) {
+            t.addRoute(this);
+        }
+        else {
+            bT.getTrips().put(this.tripId.toString(), new Trip(this.tripId, this));
+        }
     }
 
     public double Weight(){
@@ -51,6 +67,10 @@ public class Route extends Edge {
         */
         return 0;
         //TODO
+    }
+
+    public Integer getTripId() {
+        return this.tripId;
     }
 
 }

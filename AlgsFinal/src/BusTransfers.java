@@ -36,11 +36,13 @@ public class BusTransfers {
 
 
     //Temporary storage of stops, this needs to be implemented as TST
-    TST<Stop> stopsById;
-    TST<Stop> stopsByName;
+    private TST<Stop> stopsById;
+    private TST<Stop> stopsByName;
+    private TST<Trip> trips;
     public BusTransfers() {
         this.stopsById = new TST<Stop>();
         this.stopsByName = new TST<Stop>();
+        this.trips = new TST<Trip>();
         this.loadFile("/Users/dylanmurray/Downloads/input files/stops.txt", RecordType.Stop);
         this.loadFile("/Users/dylanmurray/Downloads/input files/transfers.txt", RecordType.Transfer);
       //  this.loadFile("/Users/dylanmurray/Downloads/input files/stop_times.txt", RecordType.Route);
@@ -135,16 +137,14 @@ public class BusTransfers {
 
             if (fromStopId != null) {
                 Transfer transfer = new Transfer(
+                        this,
                         fromStopId,
                         toStopId,
                         transferType,
                         minTransferTime
 
                 );
-                Stop stop = this.stopsById.get(transfer.getFromStopId().toString());
-                if(stop != null) {
-                    stop.addEdge(transfer);
-                }
+
             }
         }
         catch (NumberFormatException nfe) {
@@ -171,6 +171,7 @@ public class BusTransfers {
                 Double shapeDistTraveled = (currRecord.length > RECORD_ROUTE_SHAPE_DIST_TRAVELED) ? Double.parseDouble(currRecord[RECORD_ROUTE_SHAPE_DIST_TRAVELED]) : null;
 
                 Route route = new Route(
+                        this,
                         toStopId,
                         fromStopId,
                         tripID,
@@ -194,6 +195,10 @@ public class BusTransfers {
 
     }
 
+    public TST<Stop> getStopsById() {return this.stopsById;};
+    public TST<Stop> getStopsByName() {return this.stopsByName;};
+    public TST<Trip> getTrips() {return this.trips;};
+
     private static LocalTime parseLocalTime(String time) {
         try{
             String t = time.trim();
@@ -203,6 +208,4 @@ public class BusTransfers {
             return null;
         }
     }
-
-
 }
