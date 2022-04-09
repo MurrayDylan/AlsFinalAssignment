@@ -2,7 +2,7 @@ import java.time.LocalTime;
 import java.io.*;
 import java.util.ArrayList;
 
-public class BusTransfers {
+public class BusTimetable {
     static final int RECORD_STOP_STOP_ID = 0;
     static final int RECORD_STOP_STOP_CODE = 1;
     static final int RECORD_STOP_STOP_NAME = 2;
@@ -32,13 +32,13 @@ public class BusTransfers {
 
 
     //Temporary storage of stops, this needs to be implemented as TST
-    private TST<Stop> stopsById;
-    private TST<Stop> stopsByName;
-    private TST<Trip> trips;
-    public BusTransfers(String fileDirectory) {
-        this.stopsById = new TST<Stop>();
-        this.stopsByName = new TST<Stop>();
-        this.trips = new TST<Trip>();
+    private TST<Stop> stopsOrderedById;
+    private TST<Stop> stopsOrderedByName;
+    private TST<Trip> tripsOrderedById;
+    public BusTimetable(String fileDirectory) {
+        this.stopsOrderedById = new TST<Stop>();
+        this.stopsOrderedByName = new TST<Stop>();
+        this.tripsOrderedById = new TST<Trip>();
         this.loadFile(fileDirectory + "stops.txt", RecordType.Stop);
         this.loadFile(fileDirectory + "transfers.txt", RecordType.Transfer);
         this.loadFile(fileDirectory + "stop_times.txt", RecordType.Route);
@@ -107,8 +107,8 @@ public class BusTransfers {
                         locationType,
                         parentStation
                 );
-                this.stopsById.put(stop.getStopId().toString(), stop);
-                this.stopsByName.put(stop.getTransformedStopName(), stop);
+                this.stopsOrderedById.put(stop.getStopId().toString(), stop);
+                this.stopsOrderedByName.put(stop.getTransformedStopName(), stop);
             }
         }
         catch (NumberFormatException nfe) {
@@ -186,13 +186,13 @@ public class BusTransfers {
         }
     }
 
-    public TST<Stop> getStopsById() {return this.stopsById;};
-    public TST<Stop> getStopsByName() {return this.stopsByName;};
-    public TST<Trip> getTrips() {return this.trips;};
+    public TST<Stop> getAllStopsOrderedById() {return this.stopsOrderedById;};
+    public TST<Stop> getAllStopsOrderedByName() {return this.stopsOrderedByName;};
+    public TST<Trip> getAllTripsOrderedById() {return this.tripsOrderedById;};
 
     public ArrayList<Trip> getTripsByArrivalTime(LocalTime arrivalTime) {
         ArrayList<Trip> ret = new ArrayList<>();
-        this.trips.toArrayList().forEach((t) -> {
+        this.tripsOrderedById.toArrayList().forEach((t) -> {
             ArrayList<Route> journey = t.getJourney();
             for(int i = 0; i < journey.size(); i++) {
                 Route route = journey.get(i);

@@ -5,9 +5,9 @@ public abstract class Edge {
 
     //the time in seconds that this journey to the next stop will take
 
-    public Edge(BusTransfers bT, Integer fromStopId, Integer toStopId) {
-        this.fromStop = bT.getStopsById().get(fromStopId.toString());
-        this.toStop = bT.getStopsById().get(toStopId.toString());
+    public Edge(BusTimetable bT, Integer fromStopId, Integer toStopId) {
+        this.fromStop = bT.getAllStopsOrderedById().get(fromStopId.toString());
+        this.toStop = bT.getAllStopsOrderedById().get(toStopId.toString());
         if (this.fromStop != null) {
             this.fromStop.addEdge(this);
         }

@@ -4,7 +4,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class UserInterface {
-    private static BusTransfers bt;
+    private static BusTimetable bt;
     private static String errorMessage;
     private static String userInput;
     private static Scanner scanner = new Scanner(System.in);
@@ -29,7 +29,7 @@ public class UserInterface {
     }
 
     private static void createBusTransfers() {
-        bt = new BusTransfers(askUserForFileLocation());
+        bt = new BusTimetable(askUserForFileLocation());
     }
 
     private static void clearScreen() {
@@ -84,7 +84,7 @@ public class UserInterface {
             System.out.println("Enter bus stop name (Part there of): ");
             userInput = scanner.nextLine();
             System.out.println("");
-            ArrayList<Stop> stopsFound = bt.getStopsByName().like(userInput);
+            ArrayList<Stop> stopsFound = bt.getAllStopsOrderedByName().like(userInput);
             if (stopsFound.size() == 0) {
                 System.out.println("No stops found");
             }

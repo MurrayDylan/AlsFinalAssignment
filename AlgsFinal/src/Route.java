@@ -29,7 +29,7 @@ public class Route extends Edge {
     private Integer toStopId;
     //the StopId of the stop it will arrive at
 
-    public Route(BusTransfers bT,
+    public Route(BusTimetable bT,
                  Integer fromStopId,
                  Integer toStopId,
                  Integer tripId,
@@ -55,12 +55,12 @@ public class Route extends Edge {
         this.pickupType = pickupType;
         this.dropOffType = dropOffType;
         this.shapeDistTraveled =shapeDistTraveled;
-        Trip t = bT.getTrips().get(this.tripId.toString());
+        Trip t = bT.getAllTripsOrderedById().get(this.tripId.toString());
         if (t != null) {
             t.addRoute(this);
         }
         else {
-            bT.getTrips().put(this.tripId.toString(), new Trip(this.tripId, this));
+            bT.getAllTripsOrderedById().put(this.tripId.toString(), new Trip(this.tripId, this));
         }
     }
 
