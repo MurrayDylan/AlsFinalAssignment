@@ -148,27 +148,29 @@ public class BusTransfers {
             Integer stopSequence = (currRecord.length > RECORD_ROUTE_STOP_SEQUENCE) ? Integer.parseInt(currRecord[RECORD_ROUTE_STOP_SEQUENCE]) : null;
 
             if(stopSequence >1) {
-                Integer toStopId = (currRecord.length > RECORD_STOP_STOP_ID) ? Integer.parseInt(prevRecord[RECORD_ROUTE_STOP_ID]) : null;
-                Integer fromStopId = (prevRecord.length > RECORD_STOP_STOP_ID) ? Integer.parseInt(currRecord[RECORD_ROUTE_STOP_ID]) : null;
+                Integer fromStopId = (prevRecord.length > RECORD_STOP_STOP_ID) ? Integer.parseInt(prevRecord[RECORD_ROUTE_STOP_ID]) : null;
+                Integer toStopId = (currRecord.length > RECORD_STOP_STOP_ID) ? Integer.parseInt(currRecord[RECORD_ROUTE_STOP_ID]) : null;
                 Integer tripID = (currRecord.length > RECORD_STOP_STOP_ID) ? Integer.parseInt(currRecord[RECORD_ROUTE_TRIP_ID]) : null;
-                LocalTime arrivalTimeCurrentStop = (currRecord.length > RECORD_ROUTE_ARRIVAL_TIME) ? Utility.parseLocalTime(prevRecord[RECORD_ROUTE_ARRIVAL_TIME]) : null;
-                LocalTime arrivalTimeNextStop = (prevRecord.length > RECORD_ROUTE_ARRIVAL_TIME) ? Utility.parseLocalTime(currRecord[RECORD_ROUTE_ARRIVAL_TIME]) : null;
-                LocalTime departureTime = (currRecord.length > RECORD_ROUTE_DEPARTURE_TIME) ? Utility.parseLocalTime(currRecord[RECORD_ROUTE_DEPARTURE_TIME]) : null;
+                LocalTime arrivalTimePrevStop = (prevRecord.length > RECORD_ROUTE_ARRIVAL_TIME) ? Utility.parseLocalTime(prevRecord[RECORD_ROUTE_ARRIVAL_TIME]) : null;
+                LocalTime departureTimePrevStop = (prevRecord.length > RECORD_ROUTE_DEPARTURE_TIME) ? Utility.parseLocalTime(prevRecord[RECORD_ROUTE_DEPARTURE_TIME]) : null;
+                LocalTime arrivalTimeCurrentStop = (currRecord.length > RECORD_ROUTE_ARRIVAL_TIME) ? Utility.parseLocalTime(currRecord[RECORD_ROUTE_ARRIVAL_TIME]) : null;
+                LocalTime departureTimeCurrentStop = (currRecord.length > RECORD_ROUTE_ARRIVAL_TIME) ? Utility.parseLocalTime(currRecord[RECORD_ROUTE_ARRIVAL_TIME]) : null;
                 String stopHeadsign = (currRecord.length > RECORD_ROUTE_STOP_HEADSIGN) ? currRecord[RECORD_ROUTE_STOP_HEADSIGN] : null;
                 PickupType pickupType = (currRecord.length > RECORD_ROUTE_PICKUP_TYPE) ? PickupType.values()[Integer.parseInt(currRecord[RECORD_ROUTE_PICKUP_TYPE])] : null;
                 PickupType dropOffType = (currRecord.length > RECORD_ROUTE_DROP_OFF_TYPE) ? PickupType.values()[Integer.parseInt(currRecord[RECORD_ROUTE_DROP_OFF_TYPE])] : null;
                 Double shapeDistTraveled = (currRecord.length > RECORD_ROUTE_SHAPE_DIST_TRAVELED) ? Double.parseDouble(currRecord[RECORD_ROUTE_SHAPE_DIST_TRAVELED]) : null;
 
-                //TODO I chose to exlcude any invalid bus times as they should be seen as errors. not enough documentation was provided in specificiations so i chose myself
+                //TODO I chose to exclude any invalid bus times as they should be seen as errors. not enough documentation was provided in specifications so i chose myself
                 if (arrivalTimeCurrentStop != null) {
                     Route route = new Route(
                             this,
-                            toStopId,
                             fromStopId,
+                            toStopId,
                             tripID,
+                            arrivalTimePrevStop,
+                            departureTimePrevStop,
                             arrivalTimeCurrentStop,
-                            arrivalTimeNextStop,
-                            departureTime,
+                            departureTimeCurrentStop,
                             stopSequence,
                             stopHeadsign,
                             pickupType,
@@ -193,8 +195,8 @@ public class BusTransfers {
         this.trips.toArrayList().forEach((t) -> {
             ArrayList<Route> journey = t.getJourney();
             for(int i = 0; i < journey.size(); i++) {
-                //TODO handle stop sequence equal to 1 (doesnt display)
-                if(journey.get(i).getArrival().equals(arrivalTime)) {
+                Route route = journey.get(i);
+                if(route.getArrival().equals(arrivalTime) || (route.getStopSequence() == 2 && route.getPrevArrival().equals(arrivalTime))) {
                     ret.add(t);
                     break;
                 }

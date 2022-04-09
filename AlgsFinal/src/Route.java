@@ -4,11 +4,13 @@ public class Route extends Edge {
 
     private Integer tripId;
     //Identifies a trip.
+    private LocalTime arrivalTimePrevStop;
+    //Arrival time at the previous stop for a specific trip on a route.
+    private LocalTime departureTimePrevStop;
+    //Departure time for the previous stop in the sequence.
     private LocalTime arrivalTimeCurrentStop;
     //Arrival time at the current stop for a specific trip on a route.
-    private LocalTime arrivalTimeNextStop;
-    //Arrival time at the next stop for a specific trip on a route.
-    private LocalTime departureTime;
+    private LocalTime departureTimeCurrentStop;
     //Departure time from a specific stop for a specific trip on a route.
     private Integer stopSequence;
     //Order of stops for a particular trip. The values must increase along the trip but do not need to be consecutive.
@@ -31,9 +33,10 @@ public class Route extends Edge {
                  Integer fromStopId,
                  Integer toStopId,
                  Integer tripId,
+                 LocalTime arrivalTimePrevStop,
+                 LocalTime departureTimePrevStop,
                  LocalTime arrivalTimeCurrentStop,
-                 LocalTime arrivalTimeNextStop,
-                 LocalTime departureTime,
+                 LocalTime departureTimeCurrentStop,
                  Integer stopSequence,
                  String stopHeadsign,
                  PickupType pickupType,
@@ -43,11 +46,12 @@ public class Route extends Edge {
     {
         super(bT, fromStopId, toStopId);
         this.tripId = tripId;
+        this.arrivalTimePrevStop = arrivalTimePrevStop;
+        this.departureTimePrevStop = departureTimePrevStop;
         this.arrivalTimeCurrentStop = arrivalTimeCurrentStop;
-        this.arrivalTimeNextStop = arrivalTimeNextStop;
-        this.departureTime = departureTime;
-        this.stopHeadsign = stopHeadsign;
+        this.departureTimeCurrentStop = departureTimeCurrentStop;
         this.stopSequence = stopSequence;
+        this.stopHeadsign = stopHeadsign;
         this.pickupType = pickupType;
         this.dropOffType = dropOffType;
         this.shapeDistTraveled =shapeDistTraveled;
@@ -74,8 +78,28 @@ public class Route extends Edge {
     }
 
     public LocalTime getArrival() {
-        //TODO get Local arrival
-        return arrivalTimeCurrentStop;
+        return this.arrivalTimeCurrentStop;
+    }
+
+    public LocalTime getPrevArrival() {
+        return this.arrivalTimePrevStop;
+    }
+
+    public Integer getStopSequence() {
+        return this.stopSequence;
+    }
+
+    @Override
+    public String toString() {
+        //TODO using getStopId(), if i were to use a fancier gui i would use the stop description/ name as there would be more space
+        StringBuilder ret = new StringBuilder();
+        if (this.stopSequence == 2) {
+            ret.append("Full route: " + this.getFromStop().getStopId());
+            ret.append(" [" + this.getPrevArrival() + "]");
+        }
+        ret.append(" -> " + this.getToStop().getStopId());
+        ret.append(" [" + this.getArrival() + "]");
+        return ret.toString();
     }
 
 }

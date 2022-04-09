@@ -9,7 +9,7 @@ public class Stop {
     private String stop_code;
     //Short text or a number that identifies the location for riders.
     //The stop_code can be the same as stop_id if it is public facing. This field should be left empty for locations without a code presented to riders.
-    private String stop_name;
+    private String stopName;
     //Name of the location. Use a name that people will understand in the local and tourist vernacular.
     private String stop_desc;
     //Description of the location that provides useful, quality information.
@@ -28,10 +28,10 @@ public class Stop {
     private ArrayList<Edge> edges;
     //The list of all routes/transfers from this stop;
 
-    public Stop(Integer stop_id, String stop_code, String stop_name, String stop_desc, Double stop_lat, Double stop_lon, String zone_id, String stop_url, LocationType location_type, Integer parent_station) {
+    public Stop(Integer stop_id, String stop_code, String stopName, String stop_desc, Double stop_lat, Double stop_lon, String zone_id, String stop_url, LocationType location_type, Integer parent_station) {
         this.stop_id = stop_id;
         this.stop_code = stop_code;
-        this.stop_name = stop_name;
+        this.stopName = stopName;
         this.stop_desc = stop_desc;
         this.stop_lat = stop_lat;
         this.stop_lon = stop_lon;
@@ -51,26 +51,28 @@ public class Stop {
     }
 
     public String getStopName() {
-        return stop_name;
+        return stopName;
     }
+
+    public String getStopCode() { return stop_code; }
 
     public String getTransformedStopName() {
         String ret;
-        switch (this.stop_name.substring(0,2).toUpperCase(Locale.ROOT))
+        switch (this.stopName.substring(0,2).toUpperCase(Locale.ROOT))
         {
             case "WB":
             case "FS":
             case "NB":
             case "SB":
             case "EB":
-                ret = this.stop_name.substring(3) + " " + this.stop_name.substring(0,2);
+                ret = this.stopName.substring(3) + " " + this.stopName.substring(0,2);
                 break;
             default:
-                if(this.stop_name.substring(0,8).toUpperCase(Locale.ROOT) == "FLAGSTOP") {
-                    ret = this.stop_name.substring(9) + " " + this.stop_name.substring(0,8);
+                if(this.stopName.substring(0,8).toUpperCase(Locale.ROOT) == "FLAGSTOP") {
+                    ret = this.stopName.substring(9) + " " + this.stopName.substring(0,8);
                 }
                 else {
-                    ret = this.stop_name;
+                    ret = this.stopName;
                 }
                 break;
         }
@@ -82,7 +84,7 @@ public class Stop {
         StringBuilder ret = new StringBuilder();
         ret.append("********************************************************");
         ret.append("\n");
-        ret.append("Name: " + stop_name);
+        ret.append("Name: " + stopName);
         ret.append("\n");
         ret.append("Description: " + stop_desc);
         ret.append("\n");
