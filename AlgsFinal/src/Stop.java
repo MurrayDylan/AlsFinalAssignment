@@ -79,6 +79,10 @@ public class Stop {
         return ret.toUpperCase(Locale.ROOT);
     }
 
+    public ArrayList<Edge> getEdges() {
+        return this.edges;
+    }
+
     @Override
     public String toString() {
         StringBuilder ret = new StringBuilder();

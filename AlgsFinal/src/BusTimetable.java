@@ -1,6 +1,9 @@
+import java.lang.reflect.Array;
 import java.time.LocalTime;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class BusTimetable {
     static final int RECORD_STOP_STOP_ID = 0;
@@ -204,5 +207,55 @@ public class BusTimetable {
         });
         return ret;
     }
+/*
+    // implementation found here : https://github.com/eugenp/tutorials/blob/master/algorithms-miscellaneous-2/src/test/java/com/baeldung/algorithms/astar/RouteFinder.java
+    public ArrayList<Stop> findRoute(Integer fromStopId, Integer toStopId) {
+        ArrayList<Stop> ret = new ArrayList<>();
+
+        Map<Stop, RouteNode<T>> allNodes = new HashMap<>();
+        Queue<RouteNode> openSet = new PriorityQueue<>();
+
+        RouteNode<T> start = new RouteNode<>(from, null, 0d, targetScorer.computeCost(from, to));
+        allNodes.put(from, start);
+        openSet.add(start);
+
+        while (!openSet.isEmpty()) {
+            log.debug("Open Set contains: " + openSet.stream().map(RouteNode::getCurrent).collect(Collectors.toSet()));
+            RouteNode<T> next = openSet.poll();
+            log.debug("Looking at node: " + next);
+            if (next.getCurrent().equals(to)) {
+                log.debug("Found our destination!");
+
+                List<T> route = new ArrayList<>();
+                RouteNode<T> current = next;
+                do {
+                    route.add(0, current.getCurrent());
+                    current = allNodes.get(current.getPrevious());
+                } while (current != null);
+
+                log.debug("Route: " + route);
+                return route;
+            }
+
+            graph.getConnections(next.getCurrent()).forEach(connection -> {
+                double newScore = next.getRouteScore() + nextNodeScorer.computeCost(next.getCurrent(), connection);
+                RouteNode<T> nextNode = allNodes.getOrDefault(connection, new RouteNode<>(connection));
+                allNodes.put(connection, nextNode);
+
+                if (nextNode.getRouteScore() > newScore) {
+                    nextNode.setPrevious(next.getCurrent());
+                    nextNode.setRouteScore(newScore);
+                    nextNode.setEstimatedScore(newScore + targetScorer.computeCost(connection, to));
+                    openSet.add(nextNode);
+                    log.debug("Found a better route to node: " + nextNode);
+                }
+            });
+        }
+
+        throw new IllegalStateException("No route found");
+        return ret;
+    }
+    
+ */
 }
 

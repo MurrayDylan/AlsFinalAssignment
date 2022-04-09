@@ -2,6 +2,8 @@ import java.time.*;
 
 public class Route extends Edge {
 
+    private final int WEIGHT = 1;
+    //weight is set to 1 as outlined in specification "1 if it comes from stop_times.txt"
     private Integer tripId;
     //Identifies a trip.
     private LocalTime arrivalTimePrevStop;
@@ -63,15 +65,8 @@ public class Route extends Edge {
             bT.getAllTripsOrderedById().put(this.tripId.toString(), new Trip(this.tripId, this));
         }
     }
-
-    public double Weight(){
-        /*
-        this.journeyTime = this.arrivalTimeNextStop.toSecondOfDay() - this.arrivalTimeCurrentStop.toSecondOfDay();
-        return journeyTime;
-        */
-        return 1;
-        //TODO
-    }
+    //weight is set to 1 as outlined in specification "1 if it comes from stop_times.txt"
+    public double getWeight() { return WEIGHT; }
 
     public Integer getTripId() {
         return this.tripId;

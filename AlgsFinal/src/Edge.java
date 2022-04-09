@@ -17,5 +17,5 @@ public abstract class Edge {
 
     public Stop getToStop() { return toStop; }
 
-    public abstract double Weight();
+    public abstract double getWeight();
 }

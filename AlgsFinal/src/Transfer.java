@@ -9,7 +9,13 @@ public class Transfer extends Edge {
         this.transferType = transferType;
         this.minTime = minTime;
     }
-    public double Weight(){
+    /*
+    weight is set to minimum time divided by 100 or 2 as outlined in specification
+
+    "2 if it comes from transfers.txt with transfer type 0 (which is immediate transfer possible)
+     and for transfer type 2 the cost is the minimum transfer time divided by 100."
+    */
+    public double getWeight(){
         return (this.transferType == TransferType.MinimumTime) ? minTime.doubleValue() / 100.0 : 2;
     }
 }
