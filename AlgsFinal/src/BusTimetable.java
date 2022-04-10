@@ -1,9 +1,9 @@
-import java.lang.reflect.Array;
 import java.time.LocalTime;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.PriorityQueue;
+import java.util.HashSet;
 
 public class BusTimetable {
     static final int RECORD_STOP_STOP_ID = 0;
@@ -33,11 +33,11 @@ public class BusTimetable {
     static final int RECORD_ROUTE_SHAPE_DIST_TRAVELED = 8;
 
 
-
     //Temporary storage of stops, this needs to be implemented as TST
     private TST<Stop> stopsOrderedById;
     private TST<Stop> stopsOrderedByName;
     private TST<Trip> tripsOrderedById;
+
     public BusTimetable(String fileDirectory) {
         this.stopsOrderedById = new TST<Stop>();
         this.stopsOrderedByName = new TST<Stop>();
@@ -54,7 +54,7 @@ public class BusTimetable {
             String[] prevRecord = null;
             boolean isFirstLine = true;
             while ((line = br.readLine()) != null) {
-                if(!isFirstLine) {
+                if (!isFirstLine) {
                     currRecord = line.split(",");
                     switch (type) {
                         case Stop:
@@ -68,17 +68,14 @@ public class BusTimetable {
                             break;
                     }
                     prevRecord = currRecord;
-                }
-                else{
+                } else {
                     isFirstLine = false;
                 }
             }
-        }
-        catch (FileNotFoundException ex) {
+        } catch (FileNotFoundException ex) {
             // TODO Handle Exception;
             System.out.println(ex.toString());
-        }
-        catch (IOException ie) {
+        } catch (IOException ie) {
             // TODO Handle Exception;
             System.out.println(ie.toString());
         }
@@ -113,8 +110,7 @@ public class BusTimetable {
                 this.stopsOrderedById.put(stop.getStopId().toString(), stop);
                 this.stopsOrderedByName.put(stop.getTransformedStopName(), stop);
             }
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             // TODO Handle Exception
             System.out.println(nfe.toString());
         }
@@ -124,7 +120,7 @@ public class BusTimetable {
         try {
             Integer fromStopId = (record.length > RECORD_TRANSFERS_FROM_STOP_ID) ? Integer.parseInt(record[RECORD_TRANSFERS_FROM_STOP_ID]) : null;
             Integer toStopId = (record.length > RECORD_TRANSFERS_TO_STOP_ID) ? Integer.parseInt(record[RECORD_TRANSFERS_TO_STOP_ID]) : null;
-            TransferType transferType = (record.length > RECORD_TRANSFERS_TRANSFER_TYPE) ?  TransferType.values()[Integer.parseInt(record[RECORD_TRANSFERS_TRANSFER_TYPE])] : null;
+            TransferType transferType = (record.length > RECORD_TRANSFERS_TRANSFER_TYPE) ? TransferType.values()[Integer.parseInt(record[RECORD_TRANSFERS_TRANSFER_TYPE])] : null;
             Double minTransferTime = (record.length > RECORD_TRANSFERS_MIN_TRANSFER_TIME) ? Double.parseDouble(record[RECORD_TRANSFERS_MIN_TRANSFER_TIME]) : null;
 
             if (fromStopId != null) {
@@ -138,8 +134,7 @@ public class BusTimetable {
                 );
 
             }
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             // TODO Handle Exception
             System.out.println(nfe.toString());
         }
@@ -150,7 +145,7 @@ public class BusTimetable {
         try {
             Integer stopSequence = (currRecord.length > RECORD_ROUTE_STOP_SEQUENCE) ? Integer.parseInt(currRecord[RECORD_ROUTE_STOP_SEQUENCE]) : null;
 
-            if(stopSequence >1) {
+            if (stopSequence > 1) {
                 Integer fromStopId = (prevRecord.length > RECORD_STOP_STOP_ID) ? Integer.parseInt(prevRecord[RECORD_ROUTE_STOP_ID]) : null;
                 Integer toStopId = (currRecord.length > RECORD_STOP_STOP_ID) ? Integer.parseInt(currRecord[RECORD_ROUTE_STOP_ID]) : null;
                 Integer tripID = (currRecord.length > RECORD_STOP_STOP_ID) ? Integer.parseInt(currRecord[RECORD_ROUTE_TRIP_ID]) : null;
@@ -182,24 +177,31 @@ public class BusTimetable {
                     );
                 }
             }
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             // TODO Handle Exception
             System.out.println(nfe.toString());
         }
     }
 
-    public TST<Stop> getAllStopsOrderedById() {return this.stopsOrderedById;};
-    public TST<Stop> getAllStopsOrderedByName() {return this.stopsOrderedByName;};
-    public TST<Trip> getAllTripsOrderedById() {return this.tripsOrderedById;};
+    public TST<Stop> getAllStopsOrderedById() {
+        return this.stopsOrderedById;
+    }
+
+    public TST<Stop> getAllStopsOrderedByName() {
+        return this.stopsOrderedByName;
+    }
+
+    public TST<Trip> getAllTripsOrderedById() {
+        return this.tripsOrderedById;
+    }
 
     public ArrayList<Trip> getTripsByArrivalTime(LocalTime arrivalTime) {
         ArrayList<Trip> ret = new ArrayList<>();
         this.tripsOrderedById.toArrayList().forEach((t) -> {
             ArrayList<Route> journey = t.getJourney();
-            for(int i = 0; i < journey.size(); i++) {
+            for (int i = 0; i < journey.size(); i++) {
                 Route route = journey.get(i);
-                if(route.getArrival().equals(arrivalTime) || (route.getStopSequence() == 2 && route.getPrevArrival().equals(arrivalTime))) {
+                if (route.getArrival().equals(arrivalTime) || (route.getStopSequence() == 2 && route.getPrevArrival().equals(arrivalTime))) {
                     ret.add(t);
                     break;
                 }
@@ -207,55 +209,47 @@ public class BusTimetable {
         });
         return ret;
     }
-/*
-    // implementation found here : https://github.com/eugenp/tutorials/blob/master/algorithms-miscellaneous-2/src/test/java/com/baeldung/algorithms/astar/RouteFinder.java
-    public ArrayList<Stop> findRoute(Integer fromStopId, Integer toStopId) {
-        ArrayList<Stop> ret = new ArrayList<>();
 
-        Map<Stop, RouteNode<T>> allNodes = new HashMap<>();
-        Queue<RouteNode> openSet = new PriorityQueue<>();
-
-        RouteNode<T> start = new RouteNode<>(from, null, 0d, targetScorer.computeCost(from, to));
-        allNodes.put(from, start);
-        openSet.add(start);
-
-        while (!openSet.isEmpty()) {
-            log.debug("Open Set contains: " + openSet.stream().map(RouteNode::getCurrent).collect(Collectors.toSet()));
-            RouteNode<T> next = openSet.poll();
-            log.debug("Looking at node: " + next);
-            if (next.getCurrent().equals(to)) {
-                log.debug("Found our destination!");
-
-                List<T> route = new ArrayList<>();
-                RouteNode<T> current = next;
-                do {
-                    route.add(0, current.getCurrent());
-                    current = allNodes.get(current.getPrevious());
-                } while (current != null);
-
-                log.debug("Route: " + route);
-                return route;
-            }
-
-            graph.getConnections(next.getCurrent()).forEach(connection -> {
-                double newScore = next.getRouteScore() + nextNodeScorer.computeCost(next.getCurrent(), connection);
-                RouteNode<T> nextNode = allNodes.getOrDefault(connection, new RouteNode<>(connection));
-                allNodes.put(connection, nextNode);
-
-                if (nextNode.getRouteScore() > newScore) {
-                    nextNode.setPrevious(next.getCurrent());
-                    nextNode.setRouteScore(newScore);
-                    nextNode.setEstimatedScore(newScore + targetScorer.computeCost(connection, to));
-                    openSet.add(nextNode);
-                    log.debug("Found a better route to node: " + nextNode);
+    //implemented from https://www.youtube.com/watch?v=ySN5Wnu88nE
+    public ArrayList<Stop> AStarSearch(Stop from, Stop to) {
+        PriorityQueue<Stop> priorityQueue = new PriorityQueue<Stop>();
+        HashSet<Stop> processedStops = new HashSet<Stop>();
+        priorityQueue.add(from.setCosts(to, null, 0, true));
+        Stop currentStop, tempStop;
+        boolean isFound = false;
+        boolean isNew;
+        while (!priorityQueue.isEmpty()) {
+            currentStop = priorityQueue.poll();
+            isFound = currentStop.getStopId().equals(to.getStopId());
+            if (isFound) {
+                break;
+            } else {
+                processedStops.add(currentStop);
+                for (Edge edge : currentStop.getEdges()) {
+                    tempStop = edge.getToStop();
+                    if (!processedStops.contains(tempStop)) {
+                        isNew = !priorityQueue.contains(tempStop);
+                        tempStop = tempStop.setCosts(to, edge, currentStop.getActualCost(), isNew);
+                        if (isNew) {
+                            priorityQueue.add(tempStop);
+                        }
+                    }
                 }
-            });
+            }
         }
 
-        throw new IllegalStateException("No route found");
-        return ret;
+        ArrayList<Stop> quickestRoute = new ArrayList<Stop>();
+        if (isFound) {
+            tempStop = to;
+            while (!tempStop.getStopId().equals(from.getStopId())) {
+                quickestRoute.add(tempStop);
+                tempStop = tempStop.getPathFindingEdge().getFromStop();
+            }
+            quickestRoute.add(from);
+            Collections.reverse(quickestRoute);
+        }
+
+        return quickestRoute;
     }
-    
- */
 }
 

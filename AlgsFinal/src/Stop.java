@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class Stop {
+public class Stop implements Comparable<Stop>{
 
     //Data used to identify properties taken from https://www.translink.ca/about-us/doing-business-with-translink/app-developer-resources/gtfs/gtfs-data and https://developers.google.com/transit/gtfs/reference#stopstxt
     private Integer stop_id;
@@ -27,6 +27,11 @@ public class Stop {
     //the stops parent station
     private ArrayList<Edge> edges;
     //The list of all routes/transfers from this stop;
+
+    // The following are needed to calculate AStar
+    private Edge pathFindingEdge;
+    private Double estimateCost;
+    private Double actualCost;
 
     public Stop(Integer stop_id, String stop_code, String stopName, String stop_desc, Double stop_lat, Double stop_lon, String zone_id, String stop_url, LocationType location_type, Integer parent_station) {
         this.stop_id = stop_id;
@@ -82,6 +87,30 @@ public class Stop {
     public ArrayList<Edge> getEdges() {
         return this.edges;
     }
+    public Edge getPathFindingEdge() { return this.pathFindingEdge; }
+    public Double getActualCost() { return this.actualCost; }
+
+    public Double getCost() {
+        return ((this.estimateCost == null) ? Double.POSITIVE_INFINITY : this.estimateCost) + ((this.actualCost == null) ? Double.POSITIVE_INFINITY : this.actualCost);
+    }
+
+    public Stop setCosts(Stop toStop, Edge pathFindingEdge, double previousActualCost, boolean forceSet) {
+        double eCost = Math.hypot(this.stop_lon - toStop.stop_lon, this.stop_lat - toStop.stop_lat);
+        double aCost = previousActualCost + ((pathFindingEdge == null) ? 0 : pathFindingEdge.getWeight());
+
+        if (forceSet || this.getCost() > eCost + aCost) {
+            this.estimateCost = eCost;
+            this.actualCost = aCost;
+            this.pathFindingEdge = pathFindingEdge;
+        }
+
+        return this;
+    }
+
+    public int compareTo(Stop that) {
+        return (int)(this.getCost() - that.getCost());
+    }
+
 
     @Override
     public String toString() {
@@ -92,7 +121,7 @@ public class Stop {
         ret.append("\n");
         ret.append("Description: " + stop_desc);
         ret.append("\n");
-        ret.append("GPS: " + stop_lon + "N " + stop_lat + "W");
+        ret.append("GPS: " + stop_lat + "N " + Math.abs(stop_lon) + "W");
         ret.append("\n");
         ret.append("Zone ID: " + ((zone_id != null) ? zone_id : "N/A"));
         ret.append(" - Stop ID: " +  ((stop_id != null) ? stop_id : "N/A"));

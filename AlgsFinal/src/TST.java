@@ -40,7 +40,10 @@ public class TST<Value> {
     }
 
     public Value get (String key) {
-        Node x = get(root, key, 0);
+        Node x = null;
+        if (key != null && key.length() > 0) {
+            x = get(root, key, 0);
+        }
         if (x == null) {
             return null;
         } else {
