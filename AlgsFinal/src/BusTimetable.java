@@ -72,11 +72,7 @@ public class BusTimetable {
                     isFirstLine = false;
                 }
             }
-        } catch (FileNotFoundException ex) {
-            // TODO Handle Exception;
-            System.out.println(ex.toString());
         } catch (IOException ie) {
-            // TODO Handle Exception;
             System.out.println(ie.toString());
         }
     }
@@ -111,7 +107,6 @@ public class BusTimetable {
                 this.stopsOrderedByName.put(stop.getTransformedStopName(), stop);
             }
         } catch (NumberFormatException nfe) {
-            // TODO Handle Exception
             System.out.println(nfe.toString());
         }
     }
@@ -135,7 +130,6 @@ public class BusTimetable {
 
             }
         } catch (NumberFormatException nfe) {
-            // TODO Handle Exception
             System.out.println(nfe.toString());
         }
     }
@@ -158,7 +152,7 @@ public class BusTimetable {
                 PickupType dropOffType = (currRecord.length > RECORD_ROUTE_DROP_OFF_TYPE) ? PickupType.values()[Integer.parseInt(currRecord[RECORD_ROUTE_DROP_OFF_TYPE])] : null;
                 Double shapeDistTraveled = (currRecord.length > RECORD_ROUTE_SHAPE_DIST_TRAVELED) ? Double.parseDouble(currRecord[RECORD_ROUTE_SHAPE_DIST_TRAVELED]) : null;
 
-                //TODO I chose to exclude any invalid bus times as they should be seen as errors. not enough documentation was provided in specifications so i chose myself
+                //I chose to exclude any invalid bus times as they should be seen as errors. not enough documentation was provided in specifications so i chose myself
                 if (arrivalTimeCurrentStop != null) {
                     Route route = new Route(
                             this,
@@ -178,7 +172,6 @@ public class BusTimetable {
                 }
             }
         } catch (NumberFormatException nfe) {
-            // TODO Handle Exception
             System.out.println(nfe.toString());
         }
     }

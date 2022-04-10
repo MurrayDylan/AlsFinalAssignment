@@ -39,7 +39,6 @@ public class UserInterface {
                 System.out.println("Error not all files found!\n");
             }
         }
-        //My Location: /Users/dylanmurray/Downloads/input files/ TODO delete this
     }
 
     private static void createBusTransfers() {
@@ -112,7 +111,7 @@ public class UserInterface {
             System.out.println("=================");
             while (isVerifying) {
                 System.out.println("Enter first bus stop ID: ");
-                userInputFirstStop = scanner.nextLine(); //TODO fix issue where no user input
+                userInputFirstStop = scanner.nextLine();
                 if (bt.getAllStopsOrderedById().contains(userInputFirstStop)) {
                     isVerifying = false;
                 } else {
@@ -203,7 +202,7 @@ public class UserInterface {
             LocalTime time = Utility.parseLocalTime(userInput);
             // should output error if the user does not type in a valid time, or one that lies outside of the 24 hours in the day
             if (time == null || time.toSecondOfDay() >= 86400) {
-                errorMessage = "Invalid time entered";
+                errorMessage = "Invalid time entered, please enter a time between 00:00:00 and 23:59:59, in format HH:MM:SS";
                 System.out.println(errorMessage + "\n");
             } else {
                 errorMessage = "";

@@ -86,7 +86,7 @@ public class Route extends Edge {
 
     @Override
     public String toString() {
-        //TODO using getStopId(), if i were to use a fancier gui i would use the stop description/ name as there would be more space
+        //using getStopId(), if i were to use a fancier gui i would use the stop description/ name as there would be more space
         StringBuilder ret = new StringBuilder();
         if (this.stopSequence == 2) {
             ret.append("Full route: " + this.getFromStop().getStopId());
